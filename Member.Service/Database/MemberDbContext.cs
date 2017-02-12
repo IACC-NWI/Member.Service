@@ -5,6 +5,7 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Member.Service.Database.Model;
 
 namespace Member.Service.Database
 {
@@ -21,5 +22,7 @@ namespace Member.Service.Database
             modelBuilder.Conventions.Add(new DecimalPropertyConvention(14, 2));
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<MemberDbModel> Members { get; set; }
     }
 }

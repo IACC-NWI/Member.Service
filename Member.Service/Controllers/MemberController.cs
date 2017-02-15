@@ -129,6 +129,35 @@ namespace Member.Service.Controllers
         }
 
         [HttpGet]
+        [Route("lookupmembers/{query}")]
+        public async Task<IHttpActionResult> LookupMembers(string query)
+        {
+            var lowerQuery = query.ToLowerInvariant();
+            var members = await _dbContext.Members.Where(t =>
+                    t.FirstName.Contains(lowerQuery)
+                    || t.LastName.Contains(lowerQuery)
+                    || t.PhoneNumber.Contains(lowerQuery)
+                    || t.Email.Contains(lowerQuery)
+            ).ToListAsync();
+            return Ok(members.Select(t => new MemberModel
+            {
+                AddressLine1 = t.AddressLine1,
+                MemberId = t.MemberId,
+                MemberSince = t.MemberSince,
+                HasParent = t.HasParent,
+                ParentMemberId = t.ParentMemberId,
+                PhoneNumber = t.PhoneNumber,
+                FirstName = t.FirstName,
+                LastName = t.LastName,
+                HasChildren = t.HasChildren,
+                State = t.State,
+                City = t.City,
+                AddressLine2 = t.AddressLine2,
+                Zip = t.Zip,
+                Email = t.Email,
+            }).ToList());
+        }
+        [HttpGet]
         [Route("getallmembers")]
         public async Task<IHttpActionResult> GetAllMembers()
         {
